@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../widgets/horizontal_carousel.dart';
+import '../../widgets/search_bar.dart' as custome;
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -8,112 +9,131 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> banners = [
-      
+      'assets/images/harina.jpg',
+      'assets/images/jugo.jpg',
+      'assets/images/limpia_piso.jpg',
     ];
+
+    final List<Map<String, dynamic>> topSellers = [
+      {
+        'name': 'Harina',
+        'image': 'assets/images/harina.jpg',
+        'price': 20.0,
+      },
+      {
+        'name': 'Jugo Soprole',
+        'image': 'assets/images/jugo.jpg',
+        'price': 30.0,
+      },
+      {
+        'name': 'Limpia Piso',
+        'image': 'assets/images/limpia_piso.jpg',
+        'price': 45.0,
+      },
+    ];
+
+    final List<Map<String, dynamic>> suggestions = [
+      {
+        'name': 'Harina',
+        'image': 'assets/images/harina.jpg',
+        'price': 20.0,
+      },
+      {
+        'name': 'Jugo Soprole',
+        'image': 'assets/images/jugo.jpg',
+        'price': 30.0,
+      },
+      {
+        'name': 'Limpia Piso',
+        'image': 'assets/images/limpia_piso.jpg',
+        'price': 45.0,
+      },
+    ];
+
+    // Controlador para el buscador
+    final TextEditingController searchController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Globy', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          'Globy',
+          style: TextStyle(
+            fontSize: 35,
+            fontWeight:
+                FontWeight.bold, // opcional, para que se vea más destacado
+            color: Colors.white,
+          ),
+        ),
+        toolbarHeight: 100,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
 
-            // Carrusel de promociones
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 180.0,
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 16/9,
-                autoPlayInterval: const Duration(seconds: 3),
-              ),
-              items: banners.map((img) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration: BoxDecoration(
+            // BARRA DE BÚSQUEDA
+            custome.SearchBar(
+              controller: searchController,
+              onChanged: (value) {
+                // logica de busqueda
+              },
+              onClear: () {
+                searchController.clear();
+              },
+            ),
+
+            const SizedBox(height: 12),
+
+            // CARRUSEL DE BANNERS
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 150.0,
+                  autoPlay: true,
+                  enlargeCenterPage: false, // Evita el exceso de espacio
+                  aspectRatio: 16 / 9,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  viewportFraction: 0.9, // para que no se recorte
+                ),
+                items:
+                    banners.map((img) {
+                      return ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage(img),
+                        child: Image.asset(
+                          img,
                           fit: BoxFit.cover,
+                          width: double.infinity,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 5,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              }).toList(),
+                      );
+                    }).toList(),
+              ),
             ),
 
             const SizedBox(height: 20),
 
-            //Ejemplo de categorías
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text('Categorías principales',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 10),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      _CategoryCard('Electrónica'),
-                      _CategoryCard('Ropa'),
-                      _CategoryCard('Hogar'),
-                      _CategoryCard('Juguetes'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // Carrusel de productos: Lo más vendidos
+            HorizontalCarousel(title: 'Lo más vendido >', products: topSellers),
+
+            // Carrusel de productos: Sugerencias
+            HorizontalCarousel(title: 'Sugerencias >', products: suggestions),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Principal'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Compras'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Compras',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
-      ),
-    );
-  }
-}
-
-class _CategoryCard extends StatelessWidget {
-  final String title;
-  const _CategoryCard(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(color: AppColors.primary),
-          textAlign: TextAlign.center,
-        ),
       ),
     );
   }
