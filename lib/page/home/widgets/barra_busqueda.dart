@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
+import 'package:ihc_inscripciones/core/app_theme.dart';
 
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-  final VoidCallback? onClear;
+class BarraBusqueda extends StatelessWidget {
+  final TextEditingController controlador;
+  final ValueChanged<String> alCambiar;
+  final VoidCallback? alLimpiar;
 
-  const SearchBar({
+  const BarraBusqueda({
     super.key,
-    required this.controller,
-    required this.onChanged,
-    this.onClear,
+    required this.controlador,
+    required this.alCambiar,
+    this.alLimpiar,
   });
 
   @override
@@ -30,26 +30,29 @@ class SearchBar extends StatelessWidget {
             const SizedBox(width: 15),
             Expanded(
               child: TextField(
-                controller: controller,
-                onChanged: onChanged,
-                style: TextStyle(
-                  fontSize: 14, // tamaño de la letra
+                controller: controlador,
+                onChanged: alCambiar,
+                style: const TextStyle(
+                  fontSize: 14,
                 ),
                 decoration: const InputDecoration(
                   hintText: 'Buscar productos...',
                   hintStyle: TextStyle(
-                    fontSize: 14, // tamaño del hint
-                    color: Color.fromARGB(255, 130, 128, 128), // color del hint
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 130, 128, 128),
                   ),
                   border: InputBorder.none,
                   isDense: true,
                 ),
               ),
             ),
-            if (controller.text.isNotEmpty)
+            if (controlador.text.isNotEmpty)
               GestureDetector(
-                onTap: onClear,
-                child: const Icon(Icons.close, color: Color.fromARGB(255, 255, 255, 255)),
+                onTap: alLimpiar,
+                child: const Icon(
+                  Icons.close,
+                  color: Color.fromARGB(255, 130, 128, 128),
+                ),
               ),
           ],
         ),

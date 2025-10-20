@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import '../modules/home.dart';
+import 'package:ihc_inscripciones/page/home/home_page.dart';
 
 class AppRoutes {
   static const home = '/home';
-  static const product = '/product';
-  static const cart = '/cart';
-  static const payment = '/payment';
-  static const map = '/map';
+  static const buscar_producto = '/buscar_producto';
+  static const vista_producto = '/vista_producto';
+  static const compra = '/compra';
+  static const pagar = '/pagar';
+  static const qr = '/qr';
+  static const tarjeta = '/tarjeta';
+  static const mapa = '/mapa';
   static const tracking = '/tracking';
-  static const profile = '/profile';
+
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      home: (context) => const HomeView(),
+      home: (context) => const HomePage(),
     };
   }
 }
