@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ihc_inscripciones/page/home/home_page.dart';
-
+import 'package:ihc_inscripciones/page/compra/compra_page.dart';
 class AppRoutes {
   static const home = '/home';
   static const buscar_producto = '/buscar_producto';
@@ -16,6 +16,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> getRoutes() {
     return {
       home: (context) => const HomePage(),
+      compra: (context) => const CompraPage(),
     };
   }
 }
