@@ -35,6 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.1.1
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.1
+  flutter_credit_card: ^4.1.0
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +67,8 @@ flutter:
     - assets/images/harina.jpg
     - assets/images/jugo.jpg
     - assets/images/limpia_piso.jpg
+    - assets/images/tienda.png
+    # - lib/data/productos.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
