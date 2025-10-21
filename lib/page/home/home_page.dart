@@ -60,7 +60,6 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15),
-
                     /// Barra de búsqueda
                     BarraBusqueda(
                       controlador: controladorBusqueda,
