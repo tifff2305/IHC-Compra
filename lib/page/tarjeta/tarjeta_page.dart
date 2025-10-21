@@ -62,7 +62,11 @@ class _TarjetaPageState extends State<TarjetaPage> {
             BotonPersonalizado(
               texto: "Pagar",
                 alPresionar: () {
-                Navigator.pushNamed(context, AppRoutes.tracking);
+                Navigator.pushNamed(
+                  context, 
+                  AppRoutes.tracking,
+                  arguments: _ubicacionCtrl.text,
+                );
               },
             ),
           ],
@@ -72,10 +76,9 @@ class _TarjetaPageState extends State<TarjetaPage> {
   }
 
   void _seleccionarUbicacion() async {
-    final result = await Navigator.pushNamed(context, AppRoutes.mapa);
-    if (result is LatLng) {
-      _ubicacionCtrl.text =
-          '${result.latitude.toStringAsFixed(6)}, ${result.longitude.toStringAsFixed(6)}';
+    final direccion = await Navigator.pushNamed(context, AppRoutes.mapa);
+    if (direccion is String) {
+      _ubicacionCtrl.text = direccion;
     }
   }
 }
