@@ -155,7 +155,7 @@ class _CompraPageState extends State<CompraPage> {
         builder: (context) => PagarPage(
           itemsCarrito: items,
           resumenCarrito: resumen,
-        ),
+        ),  // Aquí pasamos los datos del carrito a PagarPage y redirigimos a la página de pago
       ),
     );
   }
