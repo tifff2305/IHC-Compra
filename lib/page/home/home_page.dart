@@ -10,9 +10,9 @@ import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 /// HomePage principal del usuario.
 /// Contiene:
 /// - Barra superior
-/// - Barra de búsqueda
+/// - Barra de búsqueda (fija)
 /// - Carrusel de banners
-/// - Secciones de productos
+/// - Secciones de productos (scrollable)
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController controladorBusqueda = TextEditingController();
 
-  /// Cargamos el json
   Map<String, dynamic>? datosProductos;
 
   @override
@@ -32,7 +31,6 @@ class _HomePageState extends State<HomePage> {
     _cargarDatos();
   }
 
-  /// Carga el JSON desde assets/data/productos.json
   Future<void> _cargarDatos() async {
     try {
       final String jsonString = await rootBundle.loadString(
@@ -52,54 +50,64 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: const BarraSuperior(),
       bottomNavigationBar: const BarraInferior(indiceActual: 0),
-      body:
-          datosProductos == null
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 15),
-                    /// Barra de búsqueda
-                    BarraBusqueda(
-                      controlador: controladorBusqueda,
-                      alCambiar: (valor) {
-                        print('Buscando: $valor');
-                      },
-                      alLimpiar: () {
-                        controladorBusqueda.clear();
-                        setState(() {});
-                      },
-                    ),
+      body: datosProductos == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                const SizedBox(height: 16),
 
-                    const SizedBox(height: 15),
-
-                    /// Carrusel de banners
-                    const CarruselBanner(),
-
-                    const SizedBox(height: 20),
-
-                    /// Secciones de productos
-                    SeccionProducto(
-                      titulo: 'Lo más vendido >',
-                      coleccion: 'mas_vendidos',
-                      datos: datosProductos!,
-                    ),
-                    SeccionProducto(
-                      titulo: 'Ofertas especiales >',
-                      coleccion: 'ofertas',
-                      datos: datosProductos!,
-                    ),
-                    SeccionProducto(
-                      titulo: 'Sugerencias >',
-                      coleccion: 'sugerencias',
-                      datos: datosProductos!,
-                    ),
-
-                    const SizedBox(height: 30),
-                  ],
+                /// Barra de búsqueda fija (no se desplaza)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: BarraBusqueda(
+                    controlador: controladorBusqueda,
+                    alCambiar: (valor) {
+                      print('Buscando: $valor');
+                    },
+                    alLimpiar: () {
+                      controladorBusqueda.clear();
+                      setState(() {});
+                    },
+                  ),
                 ),
-              ),
+
+                const SizedBox(height: 16),
+
+                /// Contenido desplazable
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Carrusel de banners
+                        const CarruselBanner(),
+
+                        const SizedBox(height: 20),
+
+                        /// Secciones de productos
+                        SeccionProducto(
+                          titulo: 'Lo más vendido >',
+                          coleccion: 'mas_vendidos',
+                          datos: datosProductos!,
+                        ),
+                        SeccionProducto(
+                          titulo: 'Ofertas especiales >',
+                          coleccion: 'ofertas',
+                          datos: datosProductos!,
+                        ),
+                        SeccionProducto(
+                          titulo: 'Sugerencias >',
+                          coleccion: 'sugerencias',
+                          datos: datosProductos!,
+                        ),
+
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
