@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ihc_inscripciones/routes/app_routes.dart';
 
 class TarjetaProducto extends StatelessWidget {
+  final String id;
   final String nombre;
   final String imagen;
   final double precio;
@@ -8,6 +10,7 @@ class TarjetaProducto extends StatelessWidget {
 
   const TarjetaProducto({
     super.key,
+    required this.id,
     required this.nombre,
     required this.imagen,
     required this.precio,
@@ -94,7 +97,9 @@ class TarjetaProducto extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    onPressed: onAgregar,
+                    onPressed: (){
+                      Navigator.pushNamed(context, AppRoutes.vista_producto, arguments: {'productoId': id});
+                    },
                     icon: const Icon(Icons.add, color: Colors.white, size: 20),
                     tooltip: 'Agregar al carrito',
                   ),

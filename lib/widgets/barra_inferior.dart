@@ -4,10 +4,7 @@ import '../routes/app_routes.dart';
 class BarraInferior extends StatelessWidget {
   final int indiceActual;
 
-  const BarraInferior({
-    super.key,
-    required this.indiceActual,
-  });
+  const BarraInferior({super.key, required this.indiceActual});
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +41,12 @@ class BarraInferior extends StatelessWidget {
         }
       },
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Principal',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Principal'),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),
           label: 'Compras',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Perfil',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
       ],
     );
   }

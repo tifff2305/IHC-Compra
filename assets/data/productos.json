@@ -1,0 +1,397 @@
+{
+  "productos": [
+    {
+      "id": "prod001",
+      "nombre": "Harina de Trigo",
+      "descripcion": "Harina de trigo fortificada, ideal para todo tipo de preparaciones",
+      "precio": 20.0,
+      "precioAnterior": 25.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "El Molino",
+      "stock": 150,
+      "enOferta": true
+    },
+    {
+      "id": "prod002",
+      "nombre": "Jugo de Naranja",
+      "descripcion": "Jugo natural de naranja sin azúcar añadida",
+      "precio": 30.0,
+      "imagen": "assets/images/jugo.jpg",
+      "categoria": "bebidas",
+      "marca": "Soprole",
+      "stock": 200,
+      "enOferta": false
+    },
+    {
+      "id": "prod003",
+      "nombre": "Limpia Piso",
+      "descripcion": "Limpiador multiusos con aroma a lavanda",
+      "precio": 45.0,
+      "precioAnterior": 50.0,
+      "imagen": "assets/images/limpia_piso.jpg",
+      "categoria": "limpieza",
+      "marca": "Magia Blanca",
+      "stock": 80,
+      "enOferta": true
+    },
+    {
+      "id": "prod004",
+      "nombre": "Arroz Grano Largo",
+      "descripcion": "Arroz de grano largo, grano suelto y suave",
+      "precio": 35.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Don Ricardo",
+      "stock": 120,
+      "enOferta": false
+    },
+    {
+      "id": "prod005",
+      "nombre": "Aceite Vegetal",
+      "descripcion": "Aceite vegetal 100% puro, ideal para freír",
+      "precio": 42.0,
+      "precioAnterior": 48.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Primor",
+      "stock": 95,
+      "enOferta": true
+    },
+    {
+      "id": "prod006",
+      "nombre": "Leche Entera",
+      "descripcion": "Leche entera fresca pasteurizada",
+      "precio": 8.5,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "lacteos",
+      "marca": "Pil Andino",
+      "stock": 250,
+      "enOferta": false
+    },
+    {
+      "id": "prod007",
+      "nombre": "Pan de Molde",
+      "descripcion": "Pan de molde suave y esponjoso",
+      "precio": 12.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "panaderia",
+      "marca": "Pan Express",
+      "stock": 180,
+      "enOferta": false
+    },
+    {
+      "id": "prod008",
+      "nombre": "Azúcar Blanca",
+      "descripcion": "Azúcar blanca refinada de alta calidad",
+      "precio": 18.0,
+      "precioAnterior": 22.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Guabirá",
+      "stock": 140,
+      "enOferta": true
+    },
+    {
+      "id": "prod009",
+      "nombre": "Detergente en Polvo",
+      "descripcion": "Detergente con poder blanqueador",
+      "precio": 55.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "limpieza",
+      "marca": "Ariel",
+      "stock": 70,
+      "enOferta": false
+    },
+    {
+      "id": "prod010",
+      "nombre": "Papel Higiénico",
+      "descripcion": "Papel higiénico triple hoja extra suave",
+      "precio": 38.0,
+      "precioAnterior": 42.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "cuidado_personal",
+      "marca": "Elite",
+      "stock": 110,
+      "enOferta": true
+    },
+    {
+      "id": "prod011",
+      "nombre": "Pasta Spaghetti",
+      "descripcion": "Pasta tipo spaghetti de sémola de trigo",
+      "precio": 14.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Don Vittorio",
+      "stock": 160,
+      "enOferta": false
+    },
+    {
+      "id": "prod012",
+      "nombre": "Atún en Lata",
+      "descripcion": "Atún en agua rico en proteínas",
+      "precio": 16.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Van Camp's",
+      "stock": 200,
+      "enOferta": false
+    },
+    {
+      "id": "prod013",
+      "nombre": "Yogurt Natural",
+      "descripcion": "Yogurt natural sin azúcar",
+      "precio": 6.5,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "lacteos",
+      "marca": "Pil Andino",
+      "stock": 300,
+      "enOferta": false
+    },
+    {
+      "id": "prod014",
+      "nombre": "Café Molido",
+      "descripcion": "Café molido 100% arábica",
+      "precio": 48.0,
+      "precioAnterior": 55.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "bebidas",
+      "marca": "La Conquista",
+      "stock": 85,
+      "enOferta": true
+    },
+    {
+      "id": "prod015",
+      "nombre": "Galletas Oreo",
+      "descripcion": "Galletas de chocolate rellenas de crema",
+      "precio": 22.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "snacks",
+      "marca": "Oreo",
+      "stock": 190,
+      "enOferta": false
+    },
+    {
+      "id": "prod016",
+      "nombre": "Huevos Frescos",
+      "descripcion": "Docena de huevos frescos de granja",
+      "precio": 28.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "frescos",
+      "marca": "Granja Feliz",
+      "stock": 130,
+      "enOferta": false
+    },
+    {
+      "id": "prod017",
+      "nombre": "Jabón Líquido",
+      "descripcion": "Jabón líquido antibacterial para manos",
+      "precio": 25.0,
+      "precioAnterior": 30.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "cuidado_personal",
+      "marca": "Protex",
+      "stock": 100,
+      "enOferta": true
+    },
+    {
+      "id": "prod018",
+      "nombre": "Sal de Mesa",
+      "descripcion": "Sal de mesa yodada y fluorada",
+      "precio": 5.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Emusal",
+      "stock": 220,
+      "enOferta": false
+    },
+    {
+      "id": "prod019",
+      "nombre": "Cereal Corn Flakes",
+      "descripcion": "Cereal de maíz tostado rico en vitaminas",
+      "precio": 32.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Kellogg's",
+      "stock": 145,
+      "enOferta": false
+    },
+    {
+      "id": "prod020",
+      "nombre": "Mayonesa",
+      "descripcion": "Mayonesa clásica cremosa",
+      "precio": 28.0,
+      "precioAnterior": 32.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "despensa",
+      "marca": "Hellmann's",
+      "stock": 110,
+      "enOferta": true
+    },
+    {
+      "id": "prod021",
+      "nombre": "Coca Cola 2L",
+      "descripcion": "Bebida gaseosa de 2 litros",
+      "precio": 15.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "bebidas",
+      "marca": "Coca Cola",
+      "stock": 280,
+      "enOferta": false
+    },
+    {
+      "id": "prod022",
+      "nombre": "Pollo Entero",
+      "descripcion": "Pollo entero fresco de granja",
+      "precio": 65.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "carnes",
+      "marca": "Sofia",
+      "stock": 45,
+      "enOferta": false
+    },
+    {
+      "id": "prod023",
+      "nombre": "Tomate Fresco",
+      "descripcion": "Tomates frescos de huerta",
+      "precio": 12.0,
+      "precioAnterior": 15.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "frutas_verduras",
+      "marca": "Local",
+      "stock": 200,
+      "enOferta": true
+    },
+    {
+      "id": "prod024",
+      "nombre": "Manzana Roja",
+      "descripcion": "Manzanas rojas frescas y crujientes",
+      "precio": 18.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "frutas_verduras",
+      "marca": "Importada",
+      "stock": 150,
+      "enOferta": false
+    },
+    {
+      "id": "prod025",
+      "nombre": "Queso Mozzarella",
+      "descripcion": "Queso mozzarella ideal para pizzas",
+      "precio": 45.0,
+      "precioAnterior": 52.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "lacteos",
+      "marca": "Pil Andino",
+      "stock": 75,
+      "enOferta": true
+    },
+    {
+      "id": "prod026",
+      "nombre": "Cerveza Paceña",
+      "descripcion": "Cerveza lager pack de 6 unidades",
+      "precio": 42.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "bebidas",
+      "marca": "Paceña",
+      "stock": 120,
+      "enOferta": false
+    },
+    {
+      "id": "prod027",
+      "nombre": "Papas Pringles",
+      "descripcion": "Papas fritas sabor original",
+      "precio": 24.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "snacks",
+      "marca": "Pringles",
+      "stock": 165,
+      "enOferta": false
+    },
+    {
+      "id": "prod028",
+      "nombre": "Shampoo",
+      "descripcion": "Shampoo para cabello con brillo",
+      "precio": 35.0,
+      "precioAnterior": 40.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "cuidado_personal",
+      "marca": "Sedal",
+      "stock": 90,
+      "enOferta": true
+    },
+    {
+      "id": "prod029",
+      "nombre": "Mantequilla",
+      "descripcion": "Mantequilla cremosa con sal",
+      "precio": 22.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "lacteos",
+      "marca": "Pil Andino",
+      "stock": 130,
+      "enOferta": false
+    },
+    {
+      "id": "prod030",
+      "nombre": "Helado de Vainilla",
+      "descripcion": "Helado cremoso sabor vainilla 1L",
+      "precio": 38.0,
+      "imagen": "assets/images/harina.jpg",
+      "categoria": "congelados",
+      "marca": "Delizia",
+      "stock": 60,
+      "enOferta": false
+    }
+  ],
+  "categorias": [
+    {
+      "id": "despensa",
+      "nombre": "Despensa"
+    },
+    {
+      "id": "lacteos",
+      "nombre": "Lácteos"
+    },
+    {
+      "id": "carnes",
+      "nombre": "Carnes y Aves"
+    },
+    {
+      "id": "frutas_verduras",
+      "nombre": "Frutas y Verduras"
+    },
+    {
+      "id": "bebidas",
+      "nombre": "Bebidas"
+    },
+    {
+      "id": "snacks",
+      "nombre": "Snacks y Dulces"
+    },
+    {
+      "id": "limpieza",
+      "nombre": "Limpieza"
+    },
+    {
+      "id": "cuidado_personal",
+      "nombre": "Cuidado Personal"
+    },
+    {
+      "id": "panaderia",
+      "nombre": "Panadería"
+    },
+    {
+      "id": "congelados",
+      "nombre": "Congelados"
+    },
+    {
+      "id": "frescos",
+      "nombre": "Frescos"
+    }
+  ],
+  "colecciones": {
+    "mas_vendidos": ["prod006", "prod021", "prod015", "prod001", "prod004", "prod013", "prod024", "prod030"],
+    "ofertas": ["prod001", "prod003", "prod005", "prod008", "prod010", "prod014", "prod017", "prod020", "prod023", "prod025", "prod028"],
+    "sugerencias": ["prod002", "prod007", "prod012", "prod016", "prod019", "prod022", "prod027", "prod029"],
+    "compras_recientes": ["prod004", "prod006", "prod011", "prod013", "prod018"]
+  }
+}
