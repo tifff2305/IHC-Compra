@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ihc_inscripciones/routes/app_routes.dart';
 import 'tarjeta_producto.dart';
 
 /// Widget que muestra una sección con un título
@@ -48,7 +49,7 @@ class SeccionProducto extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(
                 context,
-                '/buscar_producto',
+                AppRoutes.buscar_producto,
                 arguments: {'coleccion': coleccion},
               );
             },
