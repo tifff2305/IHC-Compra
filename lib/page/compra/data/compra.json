@@ -11,7 +11,6 @@
         "imagen": "assets/images/leche.jpg",
         "categoria": "lacteos",
         "marca": "Pil Andino",
-        "stock": 250,
         "enOferta": false
       },
       "cantidad": 2,
@@ -29,7 +28,6 @@
         "imagen": "assets/images/harina.jpg",
         "categoria": "despensa",
         "marca": "El Molino",
-        "stock": 150,
         "enOferta": true
       },
       "cantidad": 1,
@@ -47,38 +45,19 @@
         "imagen": "assets/images/cocacola.jpg",
         "categoria": "bebidas",
         "marca": "Coca Cola",
-        "stock": 280,
         "enOferta": false
       },
       "cantidad": 3,
       "subtotal": 45.0,
       "fechaAgregado": "2025-10-20T09:25:00"
-    },
-    {
-      "id": "compra_004",
-      "producto": {
-        "id": "prod014",
-        "nombre": "Café Molido",
-        "descripcion": "Café molido 100% arábica",
-        "precio": 48.0,
-        "precioAnterior": 55.0,
-        "imagen": "assets/images/cafe.jpg",
-        "categoria": "bebidas",
-        "marca": "La Conquista",
-        "stock": 85,
-        "enOferta": true
-      },
-      "cantidad": 1,
-      "subtotal": 48.0,
-      "fechaAgregado": "2025-10-20T09:28:00"
     }
   ],
   "resumen": {
-    "subtotal": 130.0,
-    "descuentos": 12.0,
-    "total": 118.0,
-    "cantidadItems": 7,
-    "cantidadProductos": 4
+    "subtotal": 82.0,
+    "descuentos": 5.0,
+    "total": 77.0,
+    "cantidadItems": 6,
+    "cantidadProductos": 3
   },
   "metadata": {
     "ultimaActualizacion": "2025-10-20T09:30:00",

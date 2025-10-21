@@ -63,6 +63,9 @@ flutter:
     - assets/images/harina.jpg
     - assets/images/jugo.jpg
     - assets/images/limpia_piso.jpg
+    # Data JSON
+    - lib/data/productos.json
+    - lib/page/compra/data/compra.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
