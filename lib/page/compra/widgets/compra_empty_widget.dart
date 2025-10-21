@@ -4,9 +4,9 @@ class CompraEmptyWidget extends StatelessWidget {
   final VoidCallback onIrAComprar;
 
   const CompraEmptyWidget({
-    Key? key,
+    super.key,
     required this.onIrAComprar,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

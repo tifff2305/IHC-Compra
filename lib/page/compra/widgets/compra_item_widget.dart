@@ -9,14 +9,14 @@ class CompraItemWidget extends StatelessWidget {
   final Function(int) onCantidadChanged;
 
   const CompraItemWidget({
-    Key? key,
+    super.key,
     required this.itemId,
     required this.producto,
     required this.cantidad,
     required this.subtotal,
     required this.onEliminar,
     required this.onCantidadChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class CompraItemWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -103,27 +103,7 @@ class CompraItemWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  if (producto['enOferta'] == true) ...[
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green[100],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        "Oferta",
-                        style: TextStyle(
-                          color: Colors.green[800],
-                          fontSize: 9,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                  
                 ],
               ),
 
