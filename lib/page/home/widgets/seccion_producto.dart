@@ -3,37 +3,45 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ihc_inscripciones/routes/app_routes.dart';
 import 'tarjeta_producto.dart';
 
-/// Widget que muestra una sección con un título
-/// y un carrusel horizontal de tarjetas de productos.
+/// SeccionProducto ahora soporta:
+/// - coleccion: listar por colecciones definidas en datos['colecciones']
+/// - categoria: listar por el campo producto['categoria']
+/// Si se pasa categoria, tiene prioridad sobre coleccion.
 class SeccionProducto extends StatelessWidget {
-  /// Título visible en la parte superior de la sección
   final String titulo;
-
-  /// Nombre de la colección en el JSON (por ejemplo: "mas_vendidos")
-  final String coleccion;
-
-  /// Datos completos cargados desde el JSON, enviados desde HomePage
+  final String? coleccion; // ahora opcional
+  final String? categoria; // nuevo: opcional
   final Map<String, dynamic> datos;
 
   const SeccionProducto({
     super.key,
     required this.titulo,
-    required this.coleccion,
     required this.datos,
+    this.coleccion,
+    this.categoria,
   });
 
   @override
   Widget build(BuildContext context) {
-    /// Obtenemos los IDs de productos que pertenecen a esta colección
-    final List<String> ids = List<String>.from(
-      (datos['colecciones']?[coleccion] ?? []),
-    );
+    // Lista base de productos (como Map)
+    final List<Map<String, dynamic>> allProducts =
+        List<Map<String, dynamic>>.from(datos['productos'] ?? []);
 
-    /// Filtramos los productos que coinciden con esos IDs
-    final List productos =
-        (datos['productos'] ?? []).where((p) => ids.contains(p['id'])).toList();
+    // Si se pidió filtrar por categoría -> usamos esa lista
+    List<Map<String, dynamic>> productos = [];
+    if (categoria != null && categoria!.isNotEmpty) {
+      productos =
+          allProducts
+              .where((p) => (p['categoria'] ?? '') == categoria)
+              .toList();
+    } else if (coleccion != null && coleccion!.isNotEmpty) {
+      // Si no hay categoria, pero sí coleccion -> usar colecciones del JSON
+      final List<String> ids = List<String>.from(
+        (datos['colecciones']?[coleccion] ?? []),
+      );
+      productos = allProducts.where((p) => ids.contains(p['id'])).toList();
+    }
 
-    /// Si no hay productos, no mostramos nada
     if (productos.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -44,46 +52,61 @@ class SeccionProducto extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Título clickeable que navega a la vista BuscarProducto
+          // Título clickeable (si quieres que abra la búsqueda por coleccion)
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.buscar_producto,
-                arguments: {'coleccion': coleccion},
-              );
+              // si existe coleccion navega a BuscarProducto, si no, navega pasando la categoria
+              if (coleccion != null && coleccion!.isNotEmpty) {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.buscar_producto,
+                  arguments: {'coleccion': coleccion},
+                );
+              } else if (categoria != null && categoria!.isNotEmpty) {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.buscar_producto,
+                  arguments: {'categoria': categoria},
+                );
+              }
             },
             child: Text(
               titulo,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, // color para indicar que es clickeable
+                color: Colors.black,
               ),
             ),
           ),
 
           const SizedBox(height: 10),
 
-          /// Carrusel horizontal con los productos
           CarouselSlider(
             options: CarouselOptions(
               height: 180,
               enableInfiniteScroll: false,
               viewportFraction: 0.45,
               enlargeCenterPage: false,
-              padEnds: false, // opcional para evitar borde inicial
+              padEnds: false,
             ),
-            items: productos.map((producto) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: TarjetaProducto(
+            items:
+                productos.map((producto) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: TarjetaProducto(
                       id: producto['id'],
                       nombre: producto['nombre'],
                       imagen: producto['imagen'],
-                      precio: producto['precio'],
+                      precio:
+                          (producto['precio'] as num)
+                              .toDouble(),
                       onAgregar: () {
-                        // carrito.agregar(producto);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.vista_producto,
+                          arguments: {'productoId': producto['id']},
+                        );
                       },
                     ),
                   );

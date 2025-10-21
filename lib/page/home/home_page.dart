@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController controladorBusqueda = TextEditingController();
 
   Map<String, dynamic>? datosProductos;
+  String categoriaSeleccionada = 'todo';
 
   @override
   void initState() {
@@ -47,67 +48,101 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (datosProductos == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final categorias = [
+      {'id': 'todo', 'nombre': 'Todo'},
+      ...List<Map<String, dynamic>>.from(datosProductos!['categorias'])
+    ];
+
     return Scaffold(
       appBar: const BarraSuperior(),
       bottomNavigationBar: const BarraInferior(indiceActual: 0),
-      body: datosProductos == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                const SizedBox(height: 16),
-
-                /// Barra de búsqueda fija (no se desplaza)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: BarraBusqueda(
-                    controlador: controladorBusqueda,
-                    alCambiar: (valor) {
-                      print('Buscando: $valor');
-                    },
-                    alLimpiar: () {
-                      controladorBusqueda.clear();
-                      setState(() {});
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                /// Contenido desplazable
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// Carrusel de banners
-                        const CarruselBanner(),
-
-                        const SizedBox(height: 20),
-
-                        /// Secciones de productos
-                        SeccionProducto(
-                          titulo: 'Lo más vendido >',
-                          coleccion: 'mas_vendidos',
-                          datos: datosProductos!,
-                        ),
-                        SeccionProducto(
-                          titulo: 'Ofertas especiales >',
-                          coleccion: 'ofertas',
-                          datos: datosProductos!,
-                        ),
-                        SeccionProducto(
-                          titulo: 'Sugerencias >',
-                          coleccion: 'sugerencias',
-                          datos: datosProductos!,
-                        ),
-
-                        const SizedBox(height: 30),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: BarraBusqueda(
+              controlador: controladorBusqueda,
+              alCambiar: (valor) {
+                setState(() {});
+              },
+              alLimpiar: () {
+                controladorBusqueda.clear();
+                setState(() {});
+              },
             ),
+          ),
+          const SizedBox(height: 12),
+
+          /// Filtro horizontal de categorías
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: categorias.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final cat = categorias[index];
+                final seleccionada = categoriaSeleccionada == cat['id'];
+                return ChoiceChip(
+                  label: Text(cat['nombre']),
+                  selected: seleccionada,
+                  onSelected: (_) {
+                    setState(() => categoriaSeleccionada = cat['id']);
+                  },
+                  selectedColor: Colors.blueAccent,
+                  labelStyle: TextStyle(
+                    color: seleccionada ? Colors.white : Colors.black,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          /// Contenido desplazable
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const CarruselBanner(),
+                  const SizedBox(height: 20),
+
+                  /// Solo mostramos secciones si no hay filtro
+                  if (categoriaSeleccionada == 'todo') ...[
+                    SeccionProducto(
+                      titulo: 'Lo más vendido >',
+                      coleccion: 'mas_vendidos',
+                      datos: datosProductos!,
+                    ),
+                    SeccionProducto(
+                      titulo: 'Ofertas especiales >',
+                      coleccion: 'ofertas',
+                      datos: datosProductos!,
+                    ),
+                    SeccionProducto(
+                      titulo: 'Sugerencias >',
+                      coleccion: 'sugerencias',
+                      datos: datosProductos!,
+                    ),
+                  ] else
+                    ///  Si hay categoría seleccionada
+                    SeccionProducto(
+                      titulo: 'Productos de ${categorias.firstWhere((c) => c['id'] == categoriaSeleccionada)['nombre']}',
+                      categoria: categoriaSeleccionada,
+                      datos: datosProductos!,
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
