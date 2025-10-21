@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ihc_inscripciones/page/home/home_page.dart';
 import 'package:ihc_inscripciones/page/compra/compra_page.dart';
+import 'package:ihc_inscripciones/page/pagar/pagar_page.dart';
 class AppRoutes {
   static const home = '/home';
   static const buscar_producto = '/buscar_producto';
@@ -17,6 +18,7 @@ class AppRoutes {
     return {
       home: (context) => const HomePage(),
       compra: (context) => const CompraPage(),
+      pagar: (context) => const PagarPage(), 
     };
   }
 }

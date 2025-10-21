@@ -1,0 +1,56 @@
+{
+    "metodosPago": [
+      {
+        "id": "qr",
+        "nombre": "QR",
+        "icono": "qr_code",
+        "activo": true,
+        "descripcion": "Pago mediante código QR"
+      },
+      {
+        "id": "tarjeta",
+        "nombre": "Tarjeta",
+        "icono": "credit_card",
+        "activo": true,
+        "descripcion": "Pago con tarjeta de crédito/débito"
+      },
+      {
+        "id": "efectivo",
+        "nombre": "Efectivo",
+        "icono": "payments",
+        "activo": true,
+        "descripcion": "Pago en efectivo contra entrega"
+      }
+    ],
+    "resumen": {
+      "productos": [
+        {
+          "nombre": "Producto a",
+          "precio": 100.0
+        },
+        {
+          "nombre": "Producto b",
+          "precio": 100.0
+        },
+        {
+          "nombre": "Producto c",
+          "precio": 100.0
+        }
+      ],
+      "descuentos": 50.0,
+      "costoEnvio": 0.0,
+      "subtotal": 300.0,
+      "total": 250.0
+    },
+    "ubicacion": {
+      "direccion": "Calle Principal #123",
+      "referencia": "Cerca del mercado",
+      "ciudad": "La Paz",
+      "pais": "Bolivia"
+    },
+    "metadata": {
+      "ordenId": "ORD-20251020-001",
+      "fecha": "2025-10-20T10:30:00",
+      "estado": "pendiente"
+    }
+  }

@@ -6,6 +6,7 @@ import 'widgets/compra_resumen_widget.dart';
 import 'widgets/compra_empty_widget.dart';
 import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
+import 'package:ihc_inscripciones/page/pagar/pagar_page.dart';
 import 'package:ihc_inscripciones/routes/app_routes.dart';
 
 class CompraPage extends StatefulWidget {
@@ -56,7 +57,7 @@ class _CompraPageState extends State<CompraPage> {
         isLoading = false;
         errorMessage = 'Error al cargar el carrito: $e';
       });
-      print('Error cargando carrito: $e');
+      debugPrint('Error cargando carrito: $e');
     }
   }
 
@@ -69,11 +70,11 @@ class _CompraPageState extends State<CompraPage> {
       if (index != -1) {
         final item = items[index];
         final precioUnitario = (item['producto']['precio'] as num).toDouble();
-        
+
         // Actualizar cantidad y subtotal
         items[index]['cantidad'] = nuevaCantidad;
         items[index]['subtotal'] = precioUnitario * nuevaCantidad;
-        
+
         // Recalcular totales
         calcularTotales();
       }
@@ -113,7 +114,7 @@ class _CompraPageState extends State<CompraPage> {
       final cantidad = (item['cantidad'] as int);
       final precio = (item['producto']['precio'] as num).toDouble();
       final precioAnterior = item['producto']['precioAnterior'];
-      
+
       subtotal += precio * cantidad;
       cantidadItems += cantidad;
 
@@ -135,7 +136,7 @@ class _CompraPageState extends State<CompraPage> {
     });
   }
 
-  /// Procesar pago
+  /// Procesar pago - navegar a página de pago con datos del carrito
   void procesarPago() {
     if (items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,36 +148,14 @@ class _CompraPageState extends State<CompraPage> {
       return;
     }
 
-    // Aquí iría la lógica de pago
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Compra'),
-        content: Text(
-          '¿Deseas proceder con el pago de Bs. ${resumen['total'].toStringAsFixed(2)}?',
+    // Navegar a página de pago pasando los datos del carrito
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PagarPage(
+          itemsCarrito: items,
+          resumenCarrito: resumen,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Procesar pago aquí
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('¡Compra realizada con éxito!'),
-                  backgroundColor: Color(0xFF4CAF50),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4CAF50),
-            ),
-            child: const Text('Confirmar'),
-          ),
-        ],
       ),
     );
   }
@@ -198,9 +177,7 @@ class _CompraPageState extends State<CompraPage> {
   Widget _buildBody() {
     if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF2196F3),
-        ),
+        child: CircularProgressIndicator(color: Color(0xFF2196F3)),
       );
     }
 
@@ -211,19 +188,12 @@ class _CompraPageState extends State<CompraPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.grey[400],
-              ),
+              Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
               const SizedBox(height: 16),
               Text(
                 errorMessage!,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -240,9 +210,7 @@ class _CompraPageState extends State<CompraPage> {
     }
 
     if (items.isEmpty) {
-      return CompraEmptyWidget(
-        onIrAComprar: irAComprar,
-      );
+      return CompraEmptyWidget(onIrAComprar: irAComprar);
     }
 
     return Column(
@@ -260,13 +228,13 @@ class _CompraPageState extends State<CompraPage> {
                 cantidad: item['cantidad'],
                 subtotal: (item['subtotal'] as num).toDouble(),
                 onEliminar: () => eliminarItem(item['id']),
-                onCantidadChanged: (cantidad) =>
-                    actualizarCantidad(item['id'], cantidad),
+                onCantidadChanged:
+                    (cantidad) => actualizarCantidad(item['id'], cantidad),
               );
             },
           ),
         ),
-        
+
         // Resumen y botón de pago
         CompraResumenWidget(
           subtotal: (resumen['subtotal'] as num).toDouble(),
