@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:ihc_inscripciones/page/buscar_producto/widgets/barra_busqueda.dart';
 import 'package:ihc_inscripciones/page/buscar_producto/widgets/miga_pan.dart';
@@ -28,16 +27,14 @@ class _BuscarProductoPageState extends State<BuscarProductoPage> {
     _cargarDatos();
   }
 
-  /// Carga el JSON de productos
+  /// Carga el JSON de productos desde assets
   Future<void> _cargarDatos() async {
     try {
-      // lee directamente del lib (no de assets)
       final data = await DefaultAssetBundle.of(
         context,
       ).loadString('assets/data/productos.json');
-      final jsonMap = json.decode(data);
       setState(() {
-        datosProductos = jsonMap;
+        datosProductos = json.decode(data);
       });
     } catch (e) {
       print('Error cargando productos.json: $e');
@@ -46,9 +43,9 @@ class _BuscarProductoPageState extends State<BuscarProductoPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Recuperar argumentos de la navegación
+    // Recuperar argumentos (colección) desde la navegación
     final args = ModalRoute.of(context)!.settings.arguments as Map?;
-    final coleccion = args?['coleccion'];
+    coleccion = args?['coleccion'];
 
     return Scaffold(
       appBar: const BarraSuperior(),
@@ -56,14 +53,14 @@ class _BuscarProductoPageState extends State<BuscarProductoPage> {
       body:
           datosProductos == null
               ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 15),
+              : Column(
+                children: [
+                  const SizedBox(height: 10),
 
-                    /// Barra de búsqueda ocupa todo el ancho
-                    BarraBusqueda(
+                  /// Barra de búsqueda fija (no se desplaza)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: BarraBusqueda(
                       controlador: controladorBusqueda,
                       alCambiar: (valor) {
                         setState(() {
@@ -77,21 +74,23 @@ class _BuscarProductoPageState extends State<BuscarProductoPage> {
                         });
                       },
                     ),
+                  ),
 
-                    const SizedBox(height: 15),
+                  const SizedBox(height: 10),
 
-                    /// Contenido con padding horizontal
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  /// Contenido desplazable (miga de pan + productos)
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           /// Miga de pan
-                          MigaPanWidget(ruta: ['Principal', coleccion]),
+                          MigaPanWidget(ruta: ['Principal', coleccion ?? '']),
 
                           const SizedBox(height: 20),
 
-                          /// Productos (usa scroll interno o se adapta al scroll del padre)
+                          /// Productos filtrados por colección y texto
                           Productos(
                             coleccion: coleccion,
                             datos: datosProductos!,
@@ -100,8 +99,8 @@ class _BuscarProductoPageState extends State<BuscarProductoPage> {
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
     );
   }

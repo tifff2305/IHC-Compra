@@ -78,6 +78,7 @@ class SeccionProducto extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: TarjetaProducto(
+                      id: producto['id'],
                       nombre: producto['nombre'],
                       imagen: producto['imagen'],
                       precio: producto['precio'],

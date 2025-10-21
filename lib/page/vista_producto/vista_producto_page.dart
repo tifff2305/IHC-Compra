@@ -5,6 +5,7 @@ import 'package:ihc_inscripciones/page/vista_producto/widgets/miga_pan.dart';
 import 'package:ihc_inscripciones/page/vista_producto/widgets/productos.dart';
 import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
+import 'package:ihc_inscripciones/widgets/boton_personalizado.dart';
 
 /// Página principal que muestra la vista de un producto seleccionado.
 class VistaProductoPage extends StatefulWidget {
@@ -75,7 +76,31 @@ class _VistaProductoPageState extends State<VistaProductoPage> {
 
     return Scaffold(
       appBar: const BarraSuperior(),
-      bottomNavigationBar: const BarraInferior(indiceActual: 1),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 👇 Botón global personalizado, fijo sobre la barra inferior
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: BotonPersonalizado(
+              texto: 'Agregar al carrito',
+              icono: Icons.shopping_cart_outlined,
+              colorFondo: const Color(0xFF2C3E50), // azul marino
+              colorTexto: Colors.white,
+              alPresionar: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '${productoSeleccionado!['nombre']} agregado al carrito ✅',
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const BarraInferior(indiceActual: 1),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
