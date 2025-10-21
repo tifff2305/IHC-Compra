@@ -10,6 +10,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       primaryColor: AppColors.primary,
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: AppColors.secondary),
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primary,

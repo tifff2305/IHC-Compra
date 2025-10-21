@@ -1,140 +1,103 @@
 import 'package:flutter/material.dart';
-import 'package:ihc_inscripciones/core/app_theme.dart';
 
 class TarjetaProducto extends StatelessWidget {
   final String nombre;
   final String imagen;
   final double precio;
-  final double? precioAnterior;
-  final VoidCallback alAgregar;
-  final bool enOferta;
+  final VoidCallback onAgregar;
 
   const TarjetaProducto({
     super.key,
     required this.nombre,
     required this.imagen,
     required this.precio,
-    this.precioAnterior,
-    required this.alAgregar,
-    this.enOferta = false,
+    required this.onAgregar,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
-      height: 200,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: 140,
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          // Imagen con botón flotante "+" y etiqueta de oferta
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-                child: Image.asset(
-                  imagen,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 100,
-                ),
+          // Imagen del producto
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                imagen,
+                fit: BoxFit.cover,
               ),
-              // Etiqueta de oferta
-              if (enOferta)
-                Positioned(
-                  left: 8,
-                  top: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      'OFERTA',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              // Botón agregar
-              Positioned(
-                right: 8,
-                bottom: 8,
-                child: GestureDetector(
-                  onTap: alAgregar,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary,
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(6),
-                    child: const Icon(Icons.add, color: Colors.white, size: 18),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-          // Texto del producto
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+          // Sombra superior para mejorar legibilidad
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black.withOpacity(0.25),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+          ),
+
+          // Info + botón flotante
+          Positioned(
+            bottom: 8,
+            left: 8,
+            right: 8,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  nombre,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                // Precios
-                Row(
-                  children: [
-                    Text(
-                      'Bs ${precio.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                    if (precioAnterior != null) ...[
-                      const SizedBox(width: 4),
+                // Nombre y precio
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        'Bs ${precioAnterior!.toStringAsFixed(0)}',
+                        nombre,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 11,
-                          decoration: TextDecoration.lineThrough,
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '\Bs${precio.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
                         ),
                       ),
                     ],
-                  ],
+                  ),
+                ),
+
+                // Ícono “+” (Agregar al carrito)
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    onPressed: onAgregar,
+                    icon: const Icon(Icons.add, color: Colors.white, size: 20),
+                    tooltip: 'Agregar al carrito',
+                  ),
                 ),
               ],
             ),
