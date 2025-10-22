@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ihc_inscripciones/routes/app_routes.dart';
+import 'package:ihc_inscripciones/page/compra/compra_page.dart'; // ⭐ Importar CarritoGlobal
 
 class TarjetaProducto extends StatelessWidget {
   final String id;
@@ -30,11 +32,20 @@ class TarjetaProducto extends StatelessWidget {
         children: [
           // Imagen del producto
           Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                imagen,
-                fit: BoxFit.cover,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white, // ⭐ Fondo blanco
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                  imagen,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.image_not_supported);
+                  },
+                ),
               ),
             ),
           ),
@@ -46,10 +57,7 @@ class TarjetaProducto extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
-                colors: [
-                  Colors.black.withOpacity(0.25),
-                  Colors.transparent,
-                ],
+                colors: [Colors.black.withOpacity(0.25), Colors.transparent],
               ),
             ),
           ),
@@ -88,7 +96,7 @@ class TarjetaProducto extends StatelessWidget {
                   ),
                 ),
 
-                // Ícono “+” (Agregar al carrito)
+                // Ícono "+" (Agregar al carrito)
                 Container(
                   width: 35,
                   height: 35,
@@ -97,10 +105,43 @@ class TarjetaProducto extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    onPressed: (){
-                      Navigator.pushNamed(context, AppRoutes.vista_producto, arguments: {'productoId': id});
+                    onPressed: () async {
+                      // Cargar el producto completo desde JSON
+                      final jsonString = await DefaultAssetBundle.of(
+                        context,
+                      ).loadString('assets/data/productos.json');
+                      final data = json.decode(jsonString);
+
+                      final producto = (data['productos'] as List)
+                          .cast<Map<String, dynamic>>()
+                          .firstWhere((p) => p['id'] == id);
+
+                      // ⭐ Agregar al carrito usando CarritoGlobal
+                      CarritoGlobal.agregar(producto, 1);
+
+                      // Mostrar confirmación
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('$nombre agregado al carrito ✅'),
+                            backgroundColor: const Color(0xFF4CAF50),
+                            duration: const Duration(seconds: 2),
+                            action: SnackBarAction(
+                              label: 'Ver carrito',
+                              textColor: Colors.white,
+                              onPressed: () {
+                                Navigator.pushNamed(context, AppRoutes.compra);
+                              },
+                            ),
+                          ),
+                        );
+                      }
                     },
-                    icon: const Icon(Icons.add, color: Colors.white, size: 20),
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     tooltip: 'Agregar al carrito',
                   ),
                 ),

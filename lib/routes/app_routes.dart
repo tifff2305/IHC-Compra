@@ -26,4 +26,4 @@ class AppRoutes {
       pagar: (context) => const PagarPage(), 
     };
   }
-}
+} 

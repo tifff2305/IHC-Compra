@@ -6,6 +6,8 @@ import 'package:ihc_inscripciones/page/vista_producto/widgets/productos.dart';
 import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 import 'package:ihc_inscripciones/widgets/boton_personalizado.dart';
+import 'package:ihc_inscripciones/page/compra/compra_page.dart'; // ⭐ Importar CarritoGlobal
+import 'package:ihc_inscripciones/routes/app_routes.dart';
 
 /// Página principal que muestra la vista de un producto seleccionado.
 class VistaProductoPage extends StatefulWidget {
@@ -18,6 +20,9 @@ class VistaProductoPage extends StatefulWidget {
 class _VistaProductoPageState extends State<VistaProductoPage> {
   Map<String, dynamic>? datosProductos;
   Map<String, dynamic>? productoSeleccionado;
+
+  // Key para acceder al estado del DetalleProducto
+  final GlobalKey<DetalleProductoWidgetState> _detalleKey = GlobalKey();
 
   @override
   void initState() {
@@ -85,20 +90,35 @@ class _VistaProductoPageState extends State<VistaProductoPage> {
             child: BotonPersonalizado(
               texto: 'Agregar al carrito',
               icono: Icons.shopping_cart_outlined,
-              colorFondo: const Color(0xFF2C3E50), // azul marino
+              colorFondo: const Color(0xFF2C3E50),
               colorTexto: Colors.white,
               alPresionar: () {
+                // ⭐ Obtener la cantidad del widget DetalleProducto
+                final cantidad = _detalleKey.currentState?.cantidad ?? 1;
+
+                // ⭐ Agregar al carrito usando CarritoGlobal
+                CarritoGlobal.agregar(productoSeleccionado!, cantidad);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      '${productoSeleccionado!['nombre']} agregado al carrito ✅',
+                      '${productoSeleccionado!['nombre']} x$cantidad agregado al carrito ✅',
+                    ),
+                    backgroundColor: const Color(0xFF4CAF50),
+                    duration: const Duration(seconds: 2),
+                    action: SnackBarAction(
+                      label: 'Ver carrito',
+                      textColor: Colors.white,
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.compra);
+                      },
                     ),
                   ),
                 );
               },
             ),
           ),
-          const BarraInferior(indiceActual: 1),
+          const BarraInferior(indiceActual: 0),
         ],
       ),
       body: SingleChildScrollView(
@@ -109,8 +129,11 @@ class _VistaProductoPageState extends State<VistaProductoPage> {
             MigaPanWidget(ruta: ['Principal', productoSeleccionado!['nombre']]),
             const SizedBox(height: 20),
 
-            /// Widget con la lógica y UI del producto seleccionado
-            DetalleProductoWidget(producto: productoSeleccionado!),
+            /// Widget con key para acceder a la cantidad
+            DetalleProductoWidget(
+              key: _detalleKey,
+              producto: productoSeleccionado!,
+            ),
 
             const SizedBox(height: 24),
             const Text(
@@ -120,10 +143,7 @@ class _VistaProductoPageState extends State<VistaProductoPage> {
             const SizedBox(height: 8),
 
             /// Widget que muestra los productos sugeridos
-            Productos(
-              datos: datosProductos!, 
-              productosFiltrados: similares
-            ),
+            Productos(datos: datosProductos!, productosFiltrados: similares),
           ],
         ),
       ),

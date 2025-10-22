@@ -26,20 +26,23 @@ class CarruselBanner extends StatelessWidget {
           padEnds: true,
           autoPlayInterval: const Duration(seconds: 3),
         ),
-        items:
-            banners.map((img) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    img,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
-              );
-            }).toList(),
+        items: banners.map((img) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 3.0),
+            decoration: BoxDecoration(
+              color: Colors.white, // ⭐ Fondo blanco
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                img,
+                fit: BoxFit.contain, // ⭐ Cambio de cover a contain
+                width: double.infinity,
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

@@ -38,6 +38,7 @@ class CompraItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Placeholder de imagen
+          // Imagen del producto
           Container(
             width: 80,
             height: 80,
@@ -45,8 +46,30 @@ class CompraItemWidget extends StatelessWidget {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Center(
-              child: Icon(Icons.image, color: Colors.grey[400], size: 32),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                producto['imagen'] ?? '',
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value:
+                          loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                      strokeWidth: 2,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Icon(Icons.image, color: Colors.grey[400], size: 32),
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -58,7 +81,11 @@ class CompraItemWidget extends StatelessWidget {
               children: [
                 Text(
                   producto['nombre'] ?? 'Sin nombre',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
                 ),
                 const SizedBox(height: 4),
                 // Etiqueta "Cantidad"
@@ -103,7 +130,6 @@ class CompraItemWidget extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  
                 ],
               ),
 
