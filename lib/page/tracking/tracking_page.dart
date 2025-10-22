@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ihc_inscripciones/page/tracking/widgets/estado_widget.dart';
 import 'package:ihc_inscripciones/page/tracking/widgets/flecha_widget.dart';
+import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 
 class TrackingPage extends StatelessWidget {
@@ -127,6 +128,7 @@ class TrackingPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const BarraInferior(indiceActual: 1),
     );
   }
 }

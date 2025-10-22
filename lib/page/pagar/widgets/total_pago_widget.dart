@@ -29,7 +29,8 @@ class TotalPagoWidget extends StatelessWidget {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: procesando ? null : onConfirmar,
+            onPressed: () {
+              procesando ? null : onConfirmar();},
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1C3A4F),
               shape: RoundedRectangleBorder(

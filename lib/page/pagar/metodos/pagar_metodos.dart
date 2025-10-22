@@ -49,7 +49,7 @@ class PagarMetodos {
 
     Future.delayed(const Duration(seconds: 2), () {
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, AppRoutes.home);
+        Navigator.pushReplacementNamed(context, AppRoutes.tracking);
       }
     });
   }
