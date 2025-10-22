@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihc_inscripciones/routes/app_routes.dart';
 import 'widgets/metodo_pago_widget.dart';
 import 'widgets/resumen_productos_widget.dart';
 import 'widgets/contenido_metodo_widget.dart';
@@ -10,14 +11,11 @@ import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 
 class PagarPage extends StatefulWidget {
-  final List<dynamic>? itemsCarrito; 
+  final List<dynamic>? itemsCarrito;
   final Map<String, dynamic>? resumenCarrito;
 
-  const PagarPage({
-    Key? key,
-    this.itemsCarrito, 
-    this.resumenCarrito,
-  }) : super(key: key);
+  const PagarPage({Key? key, this.itemsCarrito, this.resumenCarrito})
+    : super(key: key);
 
   @override
   State<PagarPage> createState() => _PagarPageState();
@@ -29,6 +27,7 @@ class _PagarPageState extends State<PagarPage> {
   bool isLoading = true;
   bool procesando = false;
   String? errorMessage;
+  final TextEditingController _ubicacionCtrl = TextEditingController();
 
   // Ubicación de entrega
   String direccion = 'Calle Principal #123';
@@ -82,7 +81,7 @@ class _PagarPageState extends State<PagarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: const BarraSuperior(),
       body:
           isLoading
@@ -116,10 +115,28 @@ class _PagarPageState extends State<PagarPage> {
                     const SizedBox(height: 24),
 
                     // Ubicación
-                    UbicacionWidget(
-                      direccion: direccion,
-                      ciudad: ciudad,
-                      onUbicacionCambiada: () => setState(() {}),
+                    // UbicacionWidget(
+                    //   direccion: direccion,
+                    //   ciudad: ciudad,
+                    //   onUbicacionCambiada: () => setState(() {}),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                      child: TextField(
+                        controller: _ubicacionCtrl,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Ubicación de Entrega',
+                          hintText: 'Toca para seleccionar en el mapa',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          prefixIcon: const Icon(Icons.location_on),
+                        ),
+                        onTap: () async {
+                          _seleccionarUbicacion();
+                        },
+                      ),
                     ),
 
                     const SizedBox(height: 24),
@@ -155,5 +172,12 @@ class _PagarPageState extends State<PagarPage> {
         ],
       ),
     );
+  }
+
+  void _seleccionarUbicacion() async {
+    final direccion = await Navigator.pushNamed(context, AppRoutes.mapa);
+    if (direccion is String) {
+      _ubicacionCtrl.text = direccion;
+    }
   }
 }
