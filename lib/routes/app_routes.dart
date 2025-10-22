@@ -3,7 +3,6 @@ import 'package:ihc_inscripciones/page/buscar_producto/buscar_producto_page.dart
 import 'package:ihc_inscripciones/page/home/home_page.dart';
 import 'package:ihc_inscripciones/page/navegador_page.dart';
 import 'package:ihc_inscripciones/page/tarjeta/tarjeta_page.dart';
-import 'package:ihc_inscripciones/page/qr/qr_page.dart';
 import 'package:ihc_inscripciones/page/pagar/pagar_page.dart';
 import 'package:ihc_inscripciones/page/mapa/mapa_page.dart';
 import 'package:ihc_inscripciones/page/compra/compra_page.dart';
@@ -28,7 +27,6 @@ class AppRoutes {
       home: (context) => const HomePage(),
       navegador: (context) => const NavegadorPage(),
       tarjeta: (context) => const TarjetaPage(),
-      qr: (context) => const QrPage(),
       vista_producto: (context) => const VistaProductoPage(),
       pagar: (context) => const PagarPage(),
       mapa: (context) => const MapaPage(),
