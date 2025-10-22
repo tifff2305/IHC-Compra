@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ihc_inscripciones/page/compra/compra_page.dart'; // ⭐ NUEVA
+import 'package:ihc_inscripciones/page/pagar/pagar_page.dart'; // ⭐ NUEVA
 
 /// Widget que muestra los detalles del producto, su imagen, precio y cantidad.
 class DetalleProductoWidget extends StatefulWidget {
@@ -7,12 +9,11 @@ class DetalleProductoWidget extends StatefulWidget {
   const DetalleProductoWidget({super.key, required this.producto});
 
   @override
-  DetalleProductoWidgetState createState() => DetalleProductoWidgetState(); // ⭐ Público
+  DetalleProductoWidgetState createState() => DetalleProductoWidgetState();
 }
 
-// ⭐ Clase pública (sin guion bajo)
 class DetalleProductoWidgetState extends State<DetalleProductoWidget> {
-  int cantidad = 1; // ⭐ Variable pública
+  int cantidad = 1;
 
   void _incrementar() => setState(() => cantidad++);
   void _disminuir() {
@@ -30,26 +31,21 @@ class DetalleProductoWidgetState extends State<DetalleProductoWidget> {
           width: 140,
           height: 200,
           decoration: BoxDecoration(
-            color: Colors.white, // ⭐ Fondo blanco
-            borderRadius: BorderRadius.circular(
-              8,
-            ), // ⭐ Opcional: bordes redondeados
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
           ),
-          child:
-              p['imagen'] != null
-                  ? ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      8,
-                    ), // ⭐ Si usas borderRadius arriba
-                    child: Image.network(
-                      p['imagen'],
-                      fit: BoxFit.contain, // ⭐ Cambio aquí
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.image_not_supported);
-                      },
-                    ),
-                  )
-                  : const Icon(Icons.image_not_supported),
+          child: p['imagen'] != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    p['imagen'],
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.image_not_supported);
+                    },
+                  ),
+                )
+              : const Icon(Icons.image_not_supported),
         ),
         const SizedBox(width: 16),
 
@@ -143,28 +139,57 @@ class DetalleProductoWidgetState extends State<DetalleProductoWidget> {
 
               const SizedBox(height: 16),
 
+              // ⭐ BOTÓN "COMPRA YA!" - COMPRA RÁPIDA
               ElevatedButton(
                 onPressed: () {
-                  // Lógica de agregar al carrito
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        '${p['nombre']} x$cantidad agregado al carrito',
+                  // ⭐ Crear item temporal para compra rápida
+                  final itemCompraRapida = {
+                    'id': 'compra_rapida_${DateTime.now().millisecondsSinceEpoch}',
+                    'producto': p,
+                    'cantidad': cantidad,
+                    'subtotal': (p['precio'] as num).toDouble() * cantidad,
+                    'fechaAgregado': DateTime.now().toIso8601String(),
+                  };
+
+                  // ⭐ Calcular resumen
+                  final precio = (p['precio'] as num).toDouble();
+                  final precioAnterior = p['precioAnterior'];
+                  final subtotal = precio * cantidad;
+                  
+                  double descuento = 0.0;
+                  if (precioAnterior != null) {
+                    final precioAnt = (precioAnterior as num).toDouble();
+                    descuento = (precioAnt - precio) * cantidad;
+                  }
+
+                  final resumenCompraRapida = {
+                    'subtotal': subtotal,
+                    'descuentos': descuento,
+                    'total': subtotal,
+                    'cantidadItems': cantidad,
+                    'cantidadProductos': 1,
+                  };
+
+                  // ⭐ Navegar directamente a PagarPage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PagarPage(
+                        itemsCarrito: [itemCompraRapida],
+                        resumenCarrito: resumenCompraRapida,
                       ),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2C3E50), // fondo azul marino
-                  foregroundColor: Colors.white, // texto blanco
+                  backgroundColor: const Color(0xFF2C3E50),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      8,
-                    ), // bordes redondeados
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: const Text(

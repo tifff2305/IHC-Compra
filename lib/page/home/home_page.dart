@@ -6,13 +6,9 @@ import 'package:ihc_inscripciones/page/home/widgets/carrusel_horizontal.dart';
 import 'package:ihc_inscripciones/page/home/widgets/seccion_producto.dart';
 import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
+import 'package:ihc_inscripciones/routes/app_routes.dart'; // ⭐ NUEVA
 
 /// HomePage principal del usuario.
-/// Contiene:
-/// - Barra superior
-/// - Barra de búsqueda (fija)
-/// - Carrusel de banners
-/// - Secciones de productos (scrollable)
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -45,6 +41,18 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // ⭐ NUEVA FUNCIÓN: Buscar productos
+  void _buscarProductos(String texto) {
+    if (texto.trim().isEmpty) return;
+    
+    // Navegar a la página de búsqueda con el texto
+    Navigator.pushNamed(
+      context,
+      AppRoutes.buscar_producto,
+      arguments: {'textoBusqueda': texto.trim()},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +70,16 @@ class _HomePageState extends State<HomePage> {
                   child: BarraBusqueda(
                     controlador: controladorBusqueda,
                     alCambiar: (valor) {
-                      print('Buscando: $valor');
+                      // ⭐ Opcional: buscar mientras escribe
+                      // _buscarProductos(valor);
                     },
                     alLimpiar: () {
                       controladorBusqueda.clear();
                       setState(() {});
+                    },
+                    // ⭐ NUEVO: Acción al presionar enter o botón de buscar
+                    alBuscar: () {
+                      _buscarProductos(controladorBusqueda.text);
                     },
                   ),
                 ),
