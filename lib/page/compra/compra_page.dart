@@ -1,6 +1,5 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'widgets/compra_item_widget.dart';
 import 'widgets/compra_resumen_widget.dart';
 import 'widgets/compra_empty_widget.dart';
@@ -8,6 +7,67 @@ import 'package:ihc_inscripciones/widgets/barra_inferior.dart';
 import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 import 'package:ihc_inscripciones/page/pagar/pagar_page.dart';
 import 'package:ihc_inscripciones/routes/app_routes.dart';
+
+// ⭐ CARRITO GLOBAL - FUERA DE LA CLASE
+class CarritoGlobal {
+  static List<dynamic> _items = [];
+
+  // Agregar producto al carrito
+  static void agregar(Map<String, dynamic> producto, int cantidad) {
+    final index = _items.indexWhere(
+      (item) => item['producto']['id'] == producto['id'],
+    );
+
+    if (index != -1) {
+      // Ya existe: sumar cantidad
+      _items[index]['cantidad'] += cantidad;
+      _items[index]['subtotal'] =
+          (_items[index]['producto']['precio'] as num).toDouble() *
+              _items[index]['cantidad'];
+    } else {
+      // No existe: crear nuevo item
+      final nuevoItem = {
+        'id': 'compra_${DateTime.now().millisecondsSinceEpoch}',
+        'producto': producto,
+        'cantidad': cantidad,
+        'subtotal': (producto['precio'] as num).toDouble() * cantidad,
+        'fechaAgregado': DateTime.now().toIso8601String(),
+      };
+      _items.add(nuevoItem);
+    }
+  }
+
+  // Obtener items
+  static List<dynamic> getItems() {
+    return List.from(_items);
+  }
+
+  // Actualizar item en carrito global
+  static void actualizarItem(String itemId, int nuevaCantidad) {
+    final index = _items.indexWhere((item) => item['id'] == itemId);
+    if (index != -1) {
+      final precioUnitario =
+          (_items[index]['producto']['precio'] as num).toDouble();
+      _items[index]['cantidad'] = nuevaCantidad;
+      _items[index]['subtotal'] = precioUnitario * nuevaCantidad;
+    }
+  }
+
+  // Eliminar item
+  static void eliminar(String itemId) {
+    _items.removeWhere((item) => item['id'] == itemId);
+  }
+
+  // Limpiar carrito
+  static void limpiar() {
+    _items.clear();
+  }
+
+  // Obtener cantidad total
+  static int getCantidadTotal() {
+    return _items.fold(0, (sum, item) => sum + (item['cantidad'] as int));
+  }
+}
 
 class CompraPage extends StatefulWidget {
   const CompraPage({Key? key}) : super(key: key);
@@ -34,7 +94,7 @@ class _CompraPageState extends State<CompraPage> {
     cargarCarrito();
   }
 
-  /// Cargar datos del carrito desde compra.json
+  /// Cargar carrito desde memoria
   Future<void> cargarCarrito() async {
     try {
       setState(() {
@@ -42,14 +102,9 @@ class _CompraPageState extends State<CompraPage> {
         errorMessage = null;
       });
 
-      final jsonString = await rootBundle.loadString(
-        'lib/page/compra/data/compra.json',
-      );
-      final data = json.decode(jsonString);
-
       setState(() {
-        items = data['items'] ?? [];
-        resumen = data['resumen'] ?? resumen;
+        items = CarritoGlobal.getItems();
+        calcularTotales();
         isLoading = false;
       });
     } catch (e) {
@@ -66,35 +121,30 @@ class _CompraPageState extends State<CompraPage> {
     if (nuevaCantidad < 1) return;
 
     setState(() {
-      final index = items.indexWhere((item) => item['id'] == itemId);
-      if (index != -1) {
-        final item = items[index];
-        final precioUnitario = (item['producto']['precio'] as num).toDouble();
-
-        // Actualizar cantidad y subtotal
-        items[index]['cantidad'] = nuevaCantidad;
-        items[index]['subtotal'] = precioUnitario * nuevaCantidad;
-
-        // Recalcular totales
-        calcularTotales();
+      // Actualizar en lista local
+      final indexLocal = items.indexWhere((item) => item['id'] == itemId);
+      if (indexLocal != -1) {
+        final precioUnitario =
+            (items[indexLocal]['producto']['precio'] as num).toDouble();
+        items[indexLocal]['cantidad'] = nuevaCantidad;
+        items[indexLocal]['subtotal'] = precioUnitario * nuevaCantidad;
       }
-    });
 
-    // Aquí deberías guardar en compra.json
-    // guardarCarrito();
+      // Actualizar en carrito global
+      CarritoGlobal.actualizarItem(itemId, nuevaCantidad);
+
+      calcularTotales();
+    });
   }
 
   /// Eliminar un item del carrito
   void eliminarItem(String itemId) {
     setState(() {
       items.removeWhere((item) => item['id'] == itemId);
+      CarritoGlobal.eliminar(itemId);
       calcularTotales();
     });
 
-    // Aquí deberías guardar en compra.json
-    // guardarCarrito();
-
-    // Mostrar mensaje
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Producto eliminado del carrito'),
@@ -118,7 +168,6 @@ class _CompraPageState extends State<CompraPage> {
       subtotal += precio * cantidad;
       cantidadItems += cantidad;
 
-      // Calcular descuento si existe precioAnterior
       if (precioAnterior != null) {
         final precioAnt = (precioAnterior as num).toDouble();
         descuentos += (precioAnt - precio) * cantidad;
@@ -129,7 +178,7 @@ class _CompraPageState extends State<CompraPage> {
       resumen = {
         'subtotal': subtotal,
         'descuentos': descuentos,
-        'total': subtotal, // Ya el precio incluye el descuento
+        'total': subtotal,
         'cantidadItems': cantidadItems,
         'cantidadProductos': items.length,
       };
@@ -148,14 +197,13 @@ class _CompraPageState extends State<CompraPage> {
       return;
     }
 
-    // Navegar a página de pago pasando los datos del carrito
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PagarPage(
           itemsCarrito: items,
           resumenCarrito: resumen,
-        ),  // Aquí pasamos los datos del carrito a PagarPage y redirigimos a la página de pago
+        ),
       ),
     );
   }
@@ -215,7 +263,6 @@ class _CompraPageState extends State<CompraPage> {
 
     return Column(
       children: [
-        // Lista de productos
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -234,8 +281,6 @@ class _CompraPageState extends State<CompraPage> {
             },
           ),
         ),
-
-        // Resumen y botón de pago
         CompraResumenWidget(
           subtotal: (resumen['subtotal'] as num).toDouble(),
           descuentos: (resumen['descuentos'] as num).toDouble(),

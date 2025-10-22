@@ -7,11 +7,12 @@ class DetalleProductoWidget extends StatefulWidget {
   const DetalleProductoWidget({super.key, required this.producto});
 
   @override
-  State<DetalleProductoWidget> createState() => _DetalleProductoWidgetState();
+  DetalleProductoWidgetState createState() => DetalleProductoWidgetState(); // ⭐ Público
 }
 
-class _DetalleProductoWidgetState extends State<DetalleProductoWidget> {
-  int cantidad = 1;
+// ⭐ Clase pública (sin guion bajo)
+class DetalleProductoWidgetState extends State<DetalleProductoWidget> {
+  int cantidad = 1; // ⭐ Variable pública
 
   void _incrementar() => setState(() => cantidad++);
   void _disminuir() {
@@ -26,12 +27,28 @@ class _DetalleProductoWidgetState extends State<DetalleProductoWidget> {
       children: [
         // Imagen
         Container(
-          width: 140, //ancho
+          width: 140,
           height: 200,
-          color: Colors.grey[300],
+          decoration: BoxDecoration(
+            color: Colors.white, // ⭐ Fondo blanco
+            borderRadius: BorderRadius.circular(
+              8,
+            ), // ⭐ Opcional: bordes redondeados
+          ),
           child:
               p['imagen'] != null
-                  ? Image.asset(p['imagen'], fit: BoxFit.cover)
+                  ? ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ), // ⭐ Si usas borderRadius arriba
+                    child: Image.network(
+                      p['imagen'],
+                      fit: BoxFit.contain, // ⭐ Cambio aquí
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image_not_supported);
+                      },
+                    ),
+                  )
                   : const Icon(Icons.image_not_supported),
         ),
         const SizedBox(width: 16),
