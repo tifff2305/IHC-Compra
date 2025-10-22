@@ -1,5 +1,6 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'widgets/compra_item_widget.dart';
 import 'widgets/compra_resumen_widget.dart';
 import 'widgets/compra_empty_widget.dart';
@@ -8,8 +9,12 @@ import 'package:ihc_inscripciones/widgets/barra_superior.dart';
 import 'package:ihc_inscripciones/page/pagar/pagar_page.dart';
 import 'package:ihc_inscripciones/routes/app_routes.dart';
 
-// ⭐ CARRITO GLOBAL - FUERA DE LA CLASE
-class CarritoGlobal {
+// ⭐ CARRITO GLOBAL CON NOTIFICACIONES
+class CarritoGlobal extends ChangeNotifier {
+  static final CarritoGlobal _instance = CarritoGlobal._internal();
+  factory CarritoGlobal() => _instance;
+  CarritoGlobal._internal();
+
   static List<dynamic> _items = [];
 
   // Agregar producto al carrito
@@ -19,13 +24,11 @@ class CarritoGlobal {
     );
 
     if (index != -1) {
-      // Ya existe: sumar cantidad
       _items[index]['cantidad'] += cantidad;
       _items[index]['subtotal'] =
           (_items[index]['producto']['precio'] as num).toDouble() *
               _items[index]['cantidad'];
     } else {
-      // No existe: crear nuevo item
       final nuevoItem = {
         'id': 'compra_${DateTime.now().millisecondsSinceEpoch}',
         'producto': producto,
@@ -35,6 +38,9 @@ class CarritoGlobal {
       };
       _items.add(nuevoItem);
     }
+    
+    // ⭐ Notificar cambios
+    _instance.notifyListeners();
   }
 
   // Obtener items
@@ -51,16 +57,25 @@ class CarritoGlobal {
       _items[index]['cantidad'] = nuevaCantidad;
       _items[index]['subtotal'] = precioUnitario * nuevaCantidad;
     }
+    
+    // ⭐ Notificar cambios
+    _instance.notifyListeners();
   }
 
   // Eliminar item
   static void eliminar(String itemId) {
     _items.removeWhere((item) => item['id'] == itemId);
+    
+    // ⭐ Notificar cambios
+    _instance.notifyListeners();
   }
 
   // Limpiar carrito
   static void limpiar() {
     _items.clear();
+    
+    // ⭐ Notificar cambios
+    _instance.notifyListeners();
   }
 
   // Obtener cantidad total
@@ -92,6 +107,21 @@ class _CompraPageState extends State<CompraPage> {
   void initState() {
     super.initState();
     cargarCarrito();
+    
+    // ⭐ Escuchar cambios del carrito
+    CarritoGlobal().addListener(_actualizarCarrito);
+  }
+
+  @override
+  void dispose() {
+    // ⭐ Remover listener
+    CarritoGlobal().removeListener(_actualizarCarrito);
+    super.dispose();
+  }
+
+  // ⭐ Actualizar cuando cambia el carrito
+  void _actualizarCarrito() {
+    cargarCarrito();
   }
 
   /// Cargar carrito desde memoria
@@ -121,7 +151,6 @@ class _CompraPageState extends State<CompraPage> {
     if (nuevaCantidad < 1) return;
 
     setState(() {
-      // Actualizar en lista local
       final indexLocal = items.indexWhere((item) => item['id'] == itemId);
       if (indexLocal != -1) {
         final precioUnitario =
@@ -130,9 +159,7 @@ class _CompraPageState extends State<CompraPage> {
         items[indexLocal]['subtotal'] = precioUnitario * nuevaCantidad;
       }
 
-      // Actualizar en carrito global
       CarritoGlobal.actualizarItem(itemId, nuevaCantidad);
-
       calcularTotales();
     });
   }
@@ -185,7 +212,7 @@ class _CompraPageState extends State<CompraPage> {
     });
   }
 
-  /// Procesar pago - navegar a página de pago con datos del carrito
+  /// Procesar pago
   void procesarPago() {
     if (items.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(

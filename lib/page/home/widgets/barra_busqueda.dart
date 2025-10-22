@@ -5,12 +5,14 @@ class BarraBusqueda extends StatelessWidget {
   final TextEditingController controlador;
   final ValueChanged<String> alCambiar;
   final VoidCallback? alLimpiar;
+  final VoidCallback? alBuscar; // ⭐ NUEVO
 
   const BarraBusqueda({
     super.key,
     required this.controlador,
     required this.alCambiar,
     this.alLimpiar,
+    this.alBuscar, // ⭐ NUEVO
   });
 
   @override
@@ -26,12 +28,23 @@ class BarraBusqueda extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            const Icon(Icons.search, color: Color.fromARGB(255, 188, 188, 189)),
+            // ⭐ Icono de búsqueda clickeable
+            GestureDetector(
+              onTap: alBuscar,
+              child: const Icon(
+                Icons.search,
+                color: Color.fromARGB(255, 188, 188, 189),
+              ),
+            ),
             const SizedBox(width: 15),
             Expanded(
               child: TextField(
                 controller: controlador,
                 onChanged: alCambiar,
+                // ⭐ Buscar al presionar Enter
+                onSubmitted: (valor) {
+                  if (alBuscar != null) alBuscar!();
+                },
                 style: const TextStyle(
                   fontSize: 14,
                 ),
